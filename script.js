@@ -1,33 +1,66 @@
-let modal = document.getElementById("myModal"); // get the modal
-let btn = document.getElementById("OpenModalBtn"); // button that opens the modal
-let span = document.getElementsByClassName("close")[0]; // span element that closes the modal
-
-btn.onclick = function () {
-  // when the user clicks on the button open the modal
-  modal.style.display = "block";
-};
-
-span.onclick = function () {
-  // when the user clicks on <span> (x), close the modal
-  modal.style.display = "none";
-};
-
-window.onclick = function (event) {
-  // when the user clicks anywhere outside of the modal, close it
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-};
-
-// function to change background color
-document.getElementById("changeColorBtn").onclick = function () {
-  var color = document.getElementById("colorInput").value.toLowerCase();
-  var validColors = ["red", "blue", "green", "black", "white"];
-
-  if (validColors.includes(color)) {
-    document.body.style.backgroundColor = color;
-    modal.style.display = "none";
+function recursivePower(base, exponent, callback) {
+  if (exponent === 0) {
+    callback(1);
   } else {
-    alert("Invalid color! Please enter red, blue, green, black, or white.");
+    recursivePower(base, exponent - 1, function (result) {
+      callback(result * base);
+    });
   }
+}
+
+recursivePower(5, 3, function (result) {
+  console.log(result);
+});
+recursivePower(2, 6, function (result) {
+  console.log(result);
+});
+
+fetch("https://jsonplaceholder.typicode.com/posts")
+  .then((response) => response.json())
+  .then((data) => {
+    // აქ შეგიძლიათ დაამუშავოთ მომხმარებლის მიერ მისამართზე დაბრუნებული მონაცემები
+    // ამ მაგალითში, გამოყენებული ვარიანტია JSON-ის დაბრუნების შემდეგ
+    console.log(data);
+
+    // შექმენით პოსტის ელემენტი
+    const postElement = document.createElement("div");
+    postElement.textContent = data.title; // აქ არის მაგალითი, რომელშიც არის მონაცემებში არსებული title-ი
+    document.body.appendChild(postElement);
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
+
+function deepCopy(obj) {
+  return new Promise((resolve, reject) => {
+    if (typeof obj !== "object" || obj === null) {
+      reject(new Error("Argument is not an object."));
+    } else {
+      try {
+        const copy = JSON.parse(JSON.stringify(obj));
+        resolve(copy);
+      } catch (error) {
+        reject(error);
+      }
+    }
+  });
+}
+
+// მაგალითი
+const originalObject = {
+  name: "John",
+  age: 30,
+  hobbies: ["reading", "running"],
+  address: {
+    city: "New York",
+    country: "USA",
+  },
 };
+
+deepCopy(originalObject)
+  .then((copy) => {
+    console.log("Deep copy:", copy);
+  })
+  .catch((error) => {
+    console.error("Error:", error.message);
+  });
